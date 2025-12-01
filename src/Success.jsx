@@ -9,7 +9,7 @@ export default function Success() {
         </div>
         <h1 className="text-3xl font-bold text-gray-800 mb-4">¡Pago Exitoso!</h1>
         <p className="text-gray-600 mb-6">
-          Tu pedido ha sido procesado correctamente. Recibirás un correo de confirmación shortly.
+          Tu pedido ha sido procesado correctamente. Recibirás un correo de confirmación.
         </p>
         <a 
           href="/"

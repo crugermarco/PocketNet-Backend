@@ -26,14 +26,17 @@ export default function PocketNetStore() {
     });
   };
 
-  const procesarPagoStripe = async () => {
-    setPaymentProcessing(true);
+const procesarPagoStripe = async () => {
+  setPaymentProcessing(true);
 
-    try {
-      const STRIPE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-XbOwMl_NyeQ7GcgsnwOuxG88e5M7FI8UruC8AGwSjK-zl5-ooNP5vV8ZF-l17aapIg/exec';
-
-      const params = new URLSearchParams({
-        action: 'createCheckoutSession',
+  try {
+    // URL relativa - apunta a tu API en el mismo dominio
+    const response = await fetch('/api/stripe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         nombre: formData.nombre,
         telefono: formData.telefono,
         email: formData.email,
@@ -41,35 +44,24 @@ export default function PocketNetStore() {
         ciudad: formData.ciudad,
         codigoPostal: formData.codigoPostal,
         cantidad: formData.cantidad,
-        producto: 'PocketNet Pro',
-        precio: precio,
-        total: formData.cantidad * precio
-      });
+        precio: precio
+      })
+    });
 
-      const urlCompleta = `${STRIPE_SCRIPT_URL}?${params}`;
+    const result = await response.json();
 
-      const ventanaPago = window.open(
-        urlCompleta,
-        'stripe_checkout',
-        'width=600,height=700,scrollbars=yes'
-      );
-
-      if (!ventanaPago) {
-        alert('El navegador bloqueó la ventana emergente. Por favor permite ventanas emergentes para este sitio.');
-        setPaymentProcessing(false);
-        return;
-      }
-
-      setTimeout(() => {
-        setShowModal(false);
-        setPaymentProcessing(false);
-      }, 1000);
-
-    } catch (error) {
-      alert('Error al procesar el pago: ' + error.message);
-      setPaymentProcessing(false);
+    if (result.success && result.sessionUrl) {
+      // Redirigir directamente a Stripe
+      window.location.href = result.sessionUrl;
+    } else {
+      throw new Error(result.error || 'Error al procesar el pago');
     }
-  };
+
+  } catch (error) {
+    alert('Error al procesar el pago: ' + error.message);
+    setPaymentProcessing(false);
+  }
+};
 
   const handleSubmit = async () => {
     if (!formData.nombre || !formData.telefono || !formData.email || !formData.direccion || !formData.ciudad || !formData.codigoPostal) {
