@@ -1,0 +1,5 @@
+# En la carpeta de tu proyecto:
+cd public
+
+# Descarga una imagen placeholder temporal:
+curl -o og-image.jpg "https://via.placeholder.com/1200x630/3B82F6/FFFFFF.png?text=PocketNet+Store"
