@@ -1,8 +1,5 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-// ✅ PRECIO FIJO EN EL BACKEND - NO SE RECIBE DEL FRONTEND
-const PRECIO_UNITARIO_MXN = 1; // $1 MXN (para pruebas) - Cambia a 399 para producción
-
 export default async function handler(req, res) {
   // Solo permitir método POST
   if (req.method !== 'POST') {
@@ -17,8 +14,8 @@ export default async function handler(req, res) {
       direccion, 
       ciudad, 
       codigoPostal, 
-      cantidad 
-      // ⚠️ NO recibimos "precio" del frontend - es inseguro
+      cantidad, 
+      precio 
     } = req.body;
 
     // Validar datos requeridos
@@ -26,13 +23,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Nombre y email son requeridos' });
     }
 
-    // Validar cantidad
-    const cantidadInt = parseInt(cantidad) || 1;
-    if (cantidadInt < 1 || cantidadInt > 10) {
-      return res.status(400).json({ error: 'Cantidad inválida' });
-    }
-
-    // Crear sesión de pago en Stripe con precio FIJO
+    // Crear sesión de pago en Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -43,10 +34,9 @@ export default async function handler(req, res) {
               name: 'PocketNet Pro',
               description: 'Internet portátil satelital - Pago único',
             },
-            // ✅ USA EL PRECIO FIJO DEFINIDO ARRIBA
-            unit_amount: PRECIO_UNITARIO_MXN * 100, // Stripe usa centavos
+            unit_amount: precio * 100, // Stripe usa centavos
           },
-          quantity: cantidadInt,
+          quantity: parseInt(cantidad) || 1,
         },
       ],
       mode: 'payment',
@@ -60,9 +50,7 @@ export default async function handler(req, res) {
         direccion: direccion || '',
         ciudad: ciudad || '',
         codigoPostal: codigoPostal || '',
-        cantidad: cantidadInt.toString(),
-        precio_unitario: PRECIO_UNITARIO_MXN.toString(), // Para referencia
-        total: (PRECIO_UNITARIO_MXN * cantidadInt).toString()
+        cantidad: cantidad || '1'
       }
     });
 
@@ -77,7 +65,7 @@ export default async function handler(req, res) {
     console.error('Error en Stripe:', error);
     res.status(500).json({ 
       success: false, 
-      error: 'Error al procesar el pago. Por favor intenta nuevamente.' 
+      error: error.message 
     });
   }
 }
