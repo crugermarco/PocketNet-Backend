@@ -16,7 +16,7 @@ export default function PocketNetStore() {
     cantidad: 1
   });
 
-  const precio = 399;
+  const precio = 1;
   const precioOriginal = 799;
 
   const handleInputChange = (e) => {
