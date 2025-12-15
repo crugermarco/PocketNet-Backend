@@ -3,8 +3,6 @@ import { Wifi, ShoppingCart, Check, X, Zap, Shield, Globe, Users } from 'lucide-
 
 export default function PocketNetStore() {
   const [showModal, setShowModal] = useState(false);
-  const [processing, setProcessing] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [formData, setFormData] = useState({
     nombre: '',
@@ -246,148 +244,138 @@ const procesarPagoStripe = async () => {
                 </button>
               </div>
 
-              {success ? (
-                <div className="text-center py-12">
-                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Check className="w-12 h-12 text-green-600" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">¡Compra realizada!</h3>
-                  <p className="text-gray-600">Te enviamos un correo con los detalles de tu pedido.</p>
+              {/* NOTA: Como eliminamos el estado 'success', siempre mostramos el formulario */}
+              <div className="space-y-4">
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Nombre completo *
+                  </label>
+                  <input
+                    type="text"
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                    placeholder="Juan Pérez"
+                  />
                 </div>
-              ) : (
-                <div className="space-y-4">
 
-                  {/* FORMULARIO SIN CAMBIOS */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Teléfono *
+                  </label>
+                  <input
+                    type="tel"
+                    name="telefono"
+                    value={formData.telefono}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                    placeholder="55 1234 5678"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Correo electrónico *
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                    placeholder="correo@ejemplo.com"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Dirección completa *
+                  </label>
+                  <input
+                    type="text"
+                    name="direccion"
+                    value={formData.direccion}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                    placeholder="Calle, número, colonia"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Nombre completo *
+                      Ciudad *
                     </label>
                     <input
                       type="text"
-                      name="nombre"
-                      value={formData.nombre}
+                      name="ciudad"
+                      value={formData.ciudad}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
-                      placeholder="Juan Pérez"
                     />
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Teléfono *
-                    </label>
-                    <input
-                      type="tel"
-                      name="telefono"
-                      value={formData.telefono}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
-                      placeholder="55 1234 5678"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Correo electrónico *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
-                      placeholder="correo@ejemplo.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Dirección completa *
+                      Código Postal *
                     </label>
                     <input
                       type="text"
-                      name="direccion"
-                      value={formData.direccion}
+                      name="codigoPostal"
+                      value={formData.codigoPostal}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
-                      placeholder="Calle, número, colonia"
                     />
                   </div>
+                </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Ciudad *
-                      </label>
-                      <input
-                        type="text"
-                        name="ciudad"
-                        value={formData.ciudad}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Código Postal *
-                      </label>
-                      <input
-                        type="text"
-                        name="codigoPostal"
-                        value={formData.codigoPostal}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Cantidad
-                    </label>
-                    <select
-                      name="cantidad"
-                      value={formData.cantidad}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
-                    >
-                      <option value="1">1 pieza - $399 MXN</option>
-                      <option value="2">2 piezas - $798 MXN</option>
-                      <option value="3">3 piezas - $1,197 MXN</option>
-                    </select>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-                    <div className="flex justify-between">
-                      <span>Subtotal:</span>
-                      <span className="font-bold">${precio * formData.cantidad} MXN</span>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <span>Envío:</span>
-                      <span className="font-bold text-green-600">GRATIS</span>
-                    </div>
-
-                    <div className="border-t pt-2 flex justify-between text-lg">
-                      <span className="font-bold">Total:</span>
-                      <span className="font-bold text-pink-600">${precio * formData.cantidad} MXN</span>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={handleSubmit}
-                    disabled={paymentProcessing}
-                    className="w-full bg-gradient-to-r from-pink-600 to-red-600 text-white text-lg font-bold py-4 rounded-xl hover:from-pink-700 hover:to-red-700 transition disabled:opacity-50"
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Cantidad
+                  </label>
+                  <select
+                    name="cantidad"
+                    value={formData.cantidad}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
                   >
-                    {paymentProcessing ? 'Redirigiendo a Stripe...' : '💳 Pagar con Stripe'}
-                  </button>
-
-                  <p className="text-xs text-gray-500 text-center">
-                    🔒 Pago protegido con encriptación avanzada.
-                  </p>
-
+                    <option value="1">1 pieza - $399 MXN</option>
+                    <option value="2">2 piezas - $798 MXN</option>
+                    <option value="3">3 piezas - $1,197 MXN</option>
+                  </select>
                 </div>
-              )}
+
+                <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                  <div className="flex justify-between">
+                    <span>Subtotal:</span>
+                    <span className="font-bold">${precio * formData.cantidad} MXN</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Envío:</span>
+                    <span className="font-bold text-green-600">GRATIS</span>
+                  </div>
+
+                  <div className="border-t pt-2 flex justify-between text-lg">
+                    <span className="font-bold">Total:</span>
+                    <span className="font-bold text-pink-600">${precio * formData.cantidad} MXN</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleSubmit}
+                  disabled={paymentProcessing}
+                  className="w-full bg-gradient-to-r from-pink-600 to-red-600 text-white text-lg font-bold py-4 rounded-xl hover:from-pink-700 hover:to-red-700 transition disabled:opacity-50"
+                >
+                  {paymentProcessing ? 'Redirigiendo a Stripe...' : '💳 Pagar con Stripe'}
+                </button>
+
+                <p className="text-xs text-gray-500 text-center">
+                  🔒 Pago protegido con encriptación avanzada.
+                </p>
+
+              </div>
 
             </div>
 
