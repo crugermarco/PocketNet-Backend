@@ -15,7 +15,7 @@ export default function PocketNetStore() {
   });
 
   const precio = 1;
-  // const precioOriginal = 799; // ← ELIMINADA porque no se usa
+  // const precioOriginal = 799; // ← ELIMINADA o COMENTADA
 
   const handleInputChange = (e) => {
     setFormData({
@@ -70,7 +70,7 @@ export default function PocketNetStore() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-red-50">
-      {/* Header */}
+
       <header className="bg-white shadow-sm sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -88,7 +88,7 @@ export default function PocketNetStore() {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* Banner */}
+
         <div className="bg-gradient-to-r from-pink-600 to-red-600 rounded-3xl p-8 mb-8 text-white relative overflow-hidden">
           <div className="absolute top-4 right-4 bg-yellow-400 text-red-700 px-6 py-2 rounded-full font-bold text-xl transform rotate-12">
             50% OFF
@@ -103,8 +103,8 @@ export default function PocketNetStore() {
           </div>
         </div>
 
-        {/* Resto del código SIN CAMBIOS... */}
-        {/* ... (todo el resto del JSX igual) ... */}
+        {/* ... resto del código SIN CAMBIOS ... */}
+        
       </main>
     </div>
   );
