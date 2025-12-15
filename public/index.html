@@ -1,145 +1,60 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    
-    <!-- ⚠️ SOLO UN VIEWPORT - SIMPLIFICADO -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-    <meta name="theme-color" content="#db2777" />
-    
-    <!-- DESCRIPCIÓN CORTA -->
-    <meta name="description" content="PocketNet Store - Tienda en línea" />
-    
-    <!-- MANIFEST -->
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    
-    <!-- TÍTULO SIMPLE -->
-    <title>PocketNet Store</title>
-    
-    <!-- ESTILOS BÁSICOS PARA EVITAR PANTALLA BLANCA -->
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-          sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        background-color: #fdf2f8;
-      }
-      
-      #root {
-        min-height: 100vh;
-      }
-      
-      /* Loading spinner mientras carga React */
-      .loading {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        color: #db2777;
-        font-size: 18px;
-      }
-      
-      .spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid rgba(219, 39, 119, 0.3);
-        border-radius: 50%;
-        border-top-color: #db2777;
-        animation: spin 1s linear infinite;
-        margin-bottom: 15px;
-      }
-      
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-    </style>
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+    <!-- Meta tags para Facebook/Open Graph -->
+<meta property="og:title" content="PocketNet Store - Tu tienda en línea" />
+<meta property="og:description" content="Descubre los mejores productos en PocketNet Store" />
+<meta property="og:image" content="%PUBLIC_URL%/og-image.jpg" />
+<meta property="og:url" content="https://pocketnet.shop" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="PocketNet Store" />
+
+<!-- Meta tags para Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="PocketNet Store - Tu tienda en línea" />
+<meta name="twitter:description" content="Descubre los mejores productos en PocketNet Store" />
+<meta name="twitter:image" content="%PUBLIC_URL%/og-image.jpg" />
+
+<!-- Viewport importante -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   </head>
   <body>
-    <!-- Loading inicial mientras carga React -->
-    <div id="loading" class="loading">
-      <div class="spinner"></div>
-      <p>Cargando PocketNet Store...</p>
-    </div>
-    
-    <!-- Div donde React montará la aplicación -->
-    <div id="root" style="display: none;"></div>
-    
-    <!-- Script para ocultar loading cuando React cargue -->
-    <script>
-      // Oculta el loading cuando React monte la app
-      window.addEventListener('DOMContentLoaded', function() {
-        const root = document.getElementById('root');
-        const loading = document.getElementById('loading');
-        
-        // Cuando React monte la app, ocultamos el loading
-        const observer = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList' && root.children.length > 0) {
-              loading.style.display = 'none';
-              root.style.display = 'block';
-              observer.disconnect();
-            }
-          });
-        });
-        
-        observer.observe(root, { childList: true });
-        
-        // Timeout de seguridad
-        setTimeout(function() {
-          loading.style.display = 'none';
-          root.style.display = 'block';
-        }, 5000);
-      });
-      
-      // Log para debugging
-      console.log('✅ HTML cargado correctamente');
-    </script>
-    
-    <noscript>
-      <div style="
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        padding: 20px;
-        text-align: center;
-        background: linear-gradient(135deg, #fdf2f8 0%, #fef2f2 100%);
-        color: #1f2937;
-      ">
-        <h1 style="color: #db2777; margin-bottom: 20px; font-size: 2rem;">
-          ⚠️ JavaScript Requerido
-        </h1>
-        <p style="font-size: 1.2rem; max-width: 600px; margin-bottom: 30px;">
-          PocketNet Store requiere JavaScript para funcionar correctamente.
-          Por favor, habilita JavaScript en tu navegador y recarga la página.
-        </p>
-        <div style="
-          background: white;
-          padding: 20px;
-          border-radius: 10px;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-          max-width: 500px;
-        ">
-          <h3 style="margin-bottom: 10px;">Cómo habilitar JavaScript:</h3>
-          <ul style="text-align: left; margin-left: 20px;">
-            <li>Chrome: Configuración → Privacidad y seguridad → Configuración de sitios → JavaScript</li>
-            <li>Firefox: Opciones → Privacidad y seguridad → Permisos → JavaScript</li>
-            <li>Safari: Preferencias → Seguridad → Habilitar JavaScript</li>
-          </ul>
-        </div>
-      </div>
-    </noscript>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
   </body>
 </html>
