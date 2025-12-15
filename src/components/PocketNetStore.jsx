@@ -1,73 +1,76 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import React from 'react';
 
-// Precio FIJO en backend - $1 MXN para pruebas
-const PRECIO_UNITARIO_MXN = 1;
-
-export default async function handler(req, res) {
-  console.log('🔄 API Stripe llamada');
+function PocketNetStore() {
+  console.log('🎯 React está ejecutando este componente');
   
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Método no permitido' });
-  }
-
-  try {
-    const { cantidad, nombre, email, telefono } = req.body;
-    
-    console.log('📦 Datos recibidos:', { cantidad, nombre, email });
-
-    // Validaciones básicas
-    if (!nombre || !email) {
-      return res.status(400).json({ error: 'Nombre y email son requeridos' });
-    }
-
-    const cantidadInt = parseInt(cantidad) || 1;
-    
-    console.log('💰 Creando sesión de pago:', {
-      precio: PRECIO_UNITARIO_MXN,
-      cantidad: cantidadInt,
-      total: PRECIO_UNITARIO_MXN * cantidadInt
-    });
-
-    // Crear sesión de pago en Stripe
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [{
-        price_data: {
-          currency: 'mxn',
-          product_data: {
-            name: 'PocketNet Pro',
-            description: 'Internet portátil satelital - Pago único',
-          },
-          unit_amount: PRECIO_UNITARIO_MXN * 100, // Convertir a centavos
-        },
-        quantity: cantidadInt,
-      }],
-      mode: 'payment',
-      success_url: `${req.headers.origin}/?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin}/?canceled=true`,
-      customer_email: email,
-      metadata: {
-        nombre,
-        email,
-        telefono: telefono || '',
-        cantidad: cantidadInt.toString()
-      }
-    });
-
-    console.log('✅ Sesión creada:', session.id);
-    
-    res.json({ 
-      success: true, 
-      sessionUrl: session.url,
-      sessionId: session.id 
-    });
-
-  } catch (error) {
-    console.error('❌ Error en Stripe:', error.message);
-    
-    res.status(500).json({ 
-      success: false, 
-      error: 'Error al procesar el pago. Intenta nuevamente.' 
-    });
-  }
+  return (
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#4f46e5',
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px',
+      textAlign: 'center',
+      fontFamily: 'Arial, sans-serif'
+    }}>
+      <h1 style={{ fontSize: '3rem', marginBottom: '20px' }}>
+        🎉 ¡REACT FUNCIONA!
+      </h1>
+      
+      <p style={{ fontSize: '1.5rem', marginBottom: '30px' }}>
+        Si ves esta pantalla morada, React está renderizando correctamente.
+      </p>
+      
+      <div style={{
+        backgroundColor: 'white',
+        color: '#4f46e5',
+        padding: '30px',
+        borderRadius: '15px',
+        maxWidth: '500px',
+        width: '100%'
+      }}>
+        <h2>Debug Info</h2>
+        <p><strong>URL:</strong> {window.location.href}</p>
+        <p><strong>React Version:</strong> {React.version}</p>
+        <p><strong>Timestamp:</strong> {new Date().toLocaleTimeString()}</p>
+        
+        <button
+          onClick={() => alert('¡Botón funciona!')}
+          style={{
+            marginTop: '20px',
+            padding: '12px 24px',
+            backgroundColor: '#4f46e5',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          Probar JavaScript
+        </button>
+      </div>
+      
+      <div style={{
+        marginTop: '40px',
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        padding: '20px',
+        borderRadius: '10px',
+        maxWidth: '600px'
+      }}>
+        <h3>Instrucciones:</h3>
+        <ol style={{ textAlign: 'left', marginLeft: '20px' }}>
+          <li>Presiona <strong>F12</strong> para abrir DevTools</li>
+          <li>Ve a la pestaña <strong>Console</strong></li>
+          <li>Deberías ver: "🎯 React está ejecutando este componente"</li>
+          <li>Si hay errores en rojo, cópialos aquí</li>
+        </ol>
+      </div>
+    </div>
+  );
 }
+
+export default PocketNetStore;
