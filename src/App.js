@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PocketNetStore from './components/PocketNetStore';
-import Success from './Success';
+import Success from './components/Success';
 
 function App() {
   return (
