@@ -2,46 +2,144 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    
-    <!-- ⚠️ REMUEVE ESTA LÍNEA: Tailwind via CDN -->
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-    
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     
-    <!-- ⚠️ SOLO UN VIEWPORT: -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <!-- ⚠️ SOLO UN VIEWPORT - SIMPLIFICADO -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#db2777" />
     
-    <!-- DESCRIPCIÓN CORREGIDA: -->
-    <meta name="description" content="PocketNet Store - Tu tienda en línea de confianza. Productos exclusivos, envíos rápidos y los mejores precios." />
+    <!-- DESCRIPCIÓN CORTA -->
+    <meta name="description" content="PocketNet Store - Tienda en línea" />
     
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!-- MANIFEST -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     
-    <!-- ========== OPEN GRAPH (FACEBOOK) - URLs ABSOLUTAS ========== -->
-    <!-- ⚠️ CAMBIA %PUBLIC_URL% por URL ABSOLUTA: -->
-    <meta property="og:title" content="PocketNet Store - Tu tienda en línea" />
-    <meta property="og:description" content="Descubre productos exclusivos en PocketNet Store. Envíos rápidos y precios increíbles." />
-    <meta property="og:image" content="https://pocketnet.shop/og-image.jpg" />
-    <meta property="og:url" content="https://pocketnet.shop/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="PocketNet Store" />
-    <meta property="og:locale" content="es_LA" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <!-- TÍTULO SIMPLE -->
+    <title>PocketNet Store</title>
     
-    <!-- ========== TWITTER - URLs ABSOLUTAS ========== -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="PocketNet Store - Tu tienda en línea" />
-    <meta name="twitter:description" content="Descubre productos exclusivos en PocketNet Store. Envíos rápidos y precios increíbles." />
-    <meta name="twitter:image" content="https://pocketnet.shop/og-image.jpg" />
-    
-    <!-- ========== TÍTULO CORRECTO ========== -->
-    <title>PocketNet Store - Tu tienda en línea</title>
+    <!-- ESTILOS BÁSICOS PARA EVITAR PANTALLA BLANCA -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #fdf2f8;
+      }
+      
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Loading spinner mientras carga React */
+      .loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: #db2777;
+        font-size: 18px;
+      }
+      
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(219, 39, 119, 0.3);
+        border-radius: 50%;
+        border-top-color: #db2777;
+        animation: spin 1s linear infinite;
+        margin-bottom: 15px;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
-    <noscript>Necesitas habilitar JavaScript para usar PocketNet Store</noscript>
-    <div id="root"></div>
+    <!-- Loading inicial mientras carga React -->
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Cargando PocketNet Store...</p>
+    </div>
+    
+    <!-- Div donde React montará la aplicación -->
+    <div id="root" style="display: none;"></div>
+    
+    <!-- Script para ocultar loading cuando React cargue -->
+    <script>
+      // Oculta el loading cuando React monte la app
+      window.addEventListener('DOMContentLoaded', function() {
+        const root = document.getElementById('root');
+        const loading = document.getElementById('loading');
+        
+        // Cuando React monte la app, ocultamos el loading
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' && root.children.length > 0) {
+              loading.style.display = 'none';
+              root.style.display = 'block';
+              observer.disconnect();
+            }
+          });
+        });
+        
+        observer.observe(root, { childList: true });
+        
+        // Timeout de seguridad
+        setTimeout(function() {
+          loading.style.display = 'none';
+          root.style.display = 'block';
+        }, 5000);
+      });
+      
+      // Log para debugging
+      console.log('✅ HTML cargado correctamente');
+    </script>
+    
+    <noscript>
+      <div style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding: 20px;
+        text-align: center;
+        background: linear-gradient(135deg, #fdf2f8 0%, #fef2f2 100%);
+        color: #1f2937;
+      ">
+        <h1 style="color: #db2777; margin-bottom: 20px; font-size: 2rem;">
+          ⚠️ JavaScript Requerido
+        </h1>
+        <p style="font-size: 1.2rem; max-width: 600px; margin-bottom: 30px;">
+          PocketNet Store requiere JavaScript para funcionar correctamente.
+          Por favor, habilita JavaScript en tu navegador y recarga la página.
+        </p>
+        <div style="
+          background: white;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+          max-width: 500px;
+        ">
+          <h3 style="margin-bottom: 10px;">Cómo habilitar JavaScript:</h3>
+          <ul style="text-align: left; margin-left: 20px;">
+            <li>Chrome: Configuración → Privacidad y seguridad → Configuración de sitios → JavaScript</li>
+            <li>Firefox: Opciones → Privacidad y seguridad → Permisos → JavaScript</li>
+            <li>Safari: Preferencias → Seguridad → Habilitar JavaScript</li>
+          </ul>
+        </div>
+      </div>
+    </noscript>
   </body>
 </html>
