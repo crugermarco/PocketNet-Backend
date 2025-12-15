@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
-import { Wifi, ShoppingCart, Check, X, Zap, Shield, Globe, Users } from 'lucide-react';
 
 export default function PocketNetStore() {
   const [showModal, setShowModal] = useState(false);
-  // ⚠️ ELIMINÉ ESTAS 3 VARIABLES QUE NO SE USAN:
-  // const [processing, setProcessing] = useState(false);
-  // const [success, setSuccess] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [formData, setFormData] = useState({
     nombre: '',
@@ -31,12 +27,9 @@ export default function PocketNetStore() {
     setPaymentProcessing(true);
 
     try {
-      // URL relativa - apunta a tu API en el mismo dominio
       const response = await fetch('/api/stripe', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre: formData.nombre,
           telefono: formData.telefono,
@@ -52,7 +45,6 @@ export default function PocketNetStore() {
       const result = await response.json();
 
       if (result.success && result.sessionUrl) {
-        // Redirigir directamente a Stripe
         window.location.href = result.sessionUrl;
       } else {
         throw new Error(result.error || 'Error al procesar el pago');
@@ -73,319 +65,445 @@ export default function PocketNetStore() {
     await procesarPagoStripe();
   };
 
+  // ESTILOS INLINE
+  const styles = {
+    container: {
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #fdf2f8 0%, #fef2f2 100%)',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
+    },
+    header: {
+      backgroundColor: 'white',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 40,
+      padding: '16px 0'
+    },
+    headerInner: {
+      maxWidth: '72rem',
+      margin: '0 auto',
+      padding: '0 1rem',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    },
+    logo: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+      color: '#1f2937'
+    },
+    buyButton: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      padding: '0.5rem 1rem',
+      backgroundColor: '#db2777',
+      color: 'white',
+      border: 'none',
+      borderRadius: '9999px',
+      cursor: 'pointer',
+      fontSize: '1rem'
+    },
+    main: {
+      maxWidth: '72rem',
+      margin: '0 auto',
+      padding: '2rem 1rem'
+    },
+    banner: {
+      background: 'linear-gradient(to right, #db2777, #dc2626)',
+      borderRadius: '1.5rem',
+      padding: '2rem',
+      color: 'white',
+      marginBottom: '2rem',
+      position: 'relative',
+      overflow: 'hidden'
+    },
+    discountBadge: {
+      position: 'absolute',
+      top: '1rem',
+      right: '1rem',
+      backgroundColor: '#fbbf24',
+      color: '#b91c1c',
+      padding: '0.5rem 1.5rem',
+      borderRadius: '9999px',
+      fontWeight: 'bold',
+      fontSize: '1.25rem',
+      transform: 'rotate(12deg)'
+    },
+    bannerTitle: {
+      fontSize: '3rem',
+      fontWeight: 'bold',
+      marginBottom: '1rem'
+    },
+    price: {
+      fontSize: '4rem',
+      fontWeight: 'bold',
+      margin: '1rem 0'
+    },
+    originalPrice: {
+      fontSize: '1.5rem',
+      marginBottom: '1rem'
+    },
+    strike: {
+      textDecoration: 'line-through'
+    },
+    section: {
+      backgroundColor: 'white',
+      borderRadius: '1.5rem',
+      padding: '2rem',
+      marginBottom: '2rem',
+      boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'
+    },
+    featureGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+      gap: '1rem',
+      margin: '2rem 0'
+    },
+    featureItem: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: '0.75rem'
+    },
+    ctaButton: {
+      width: '100%',
+      background: 'linear-gradient(to right, #db2777, #dc2626)',
+      color: 'white',
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+      padding: '1.5rem',
+      borderRadius: '9999px',
+      border: 'none',
+      cursor: 'pointer',
+      marginBottom: '1rem'
+    },
+    modalOverlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '1rem',
+      zIndex: 50
+    },
+    modalContent: {
+      backgroundColor: 'white',
+      borderRadius: '1.5rem',
+      maxWidth: '28rem',
+      width: '100%',
+      maxHeight: '90vh',
+      overflowY: 'auto'
+    },
+    input: {
+      width: '100%',
+      padding: '0.75rem 1rem',
+      border: '1px solid #d1d5db',
+      borderRadius: '0.75rem',
+      fontSize: '1rem'
+    },
+    label: {
+      display: 'block',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      color: '#374151',
+      marginBottom: '0.25rem'
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-red-50">
-
+    <div style={styles.container}>
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Wifi className="w-8 h-8 text-pink-600" />
-            <span className="text-2xl font-bold text-gray-800">PocketNet Pro</span>
+      <header style={styles.header}>
+        <div style={styles.headerInner}>
+          <div style={styles.logo}>
+            <span style={{ fontSize: '2rem' }}>📶</span>
+            <span>PocketNet Pro</span>
           </div>
-
           <button 
             onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700 transition">
-            <ShoppingCart className="w-5 h-5" />
+            style={styles.buyButton}
+          >
+            <span style={{ fontSize: '1.25rem' }}>🛒</span>
             <span>Comprar</span>
           </button>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
-
+      <main style={styles.main}>
         {/* Banner */}
-        <div className="bg-gradient-to-r from-pink-600 to-red-600 rounded-3xl p-8 mb-8 text-white relative overflow-hidden">
-          <div className="absolute top-4 right-4 bg-yellow-400 text-red-700 px-6 py-2 rounded-full font-bold text-xl transform rotate-12">
+        <div style={styles.banner}>
+          <div style={styles.discountBadge}>
             50% OFF
           </div>
-
-          <h1 className="text-5xl font-bold mb-4">$399 MXN</h1>
-          <p className="text-2xl mb-2">Precio original: <span className="line-through">${precioOriginal} MXN</span></p>
-
-          <div className="mt-6 space-y-2">
-            <p className="text-xl">🌐 La forma más fácil de tener internet portátil donde estés</p>
-            <p className="text-lg opacity-90">PROMOCIÓN ESPECIAL DE FIN DE AÑO</p>
+          
+          <h1 style={styles.price}>${precio} MXN</h1>
+          <p style={styles.originalPrice}>
+            Precio original: <span style={styles.strike}>${precioOriginal} MXN</span>
+          </p>
+          
+          <div style={{ marginTop: '1.5rem' }}>
+            <p style={{ fontSize: '1.25rem' }}>🌐 La forma más fácil de tener internet portátil donde estés</p>
+            <p style={{ fontSize: '1.125rem', opacity: 0.9 }}>PROMOCIÓN ESPECIAL DE FIN DE AÑO</p>
           </div>
         </div>
 
         {/* Producto */}
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden mb-8">
-          <div className="p-8">
-
-            <div className="flex items-center gap-2 mb-4">
-              <Globe className="w-6 h-6 text-pink-600" />
-              <h2 className="text-3xl font-bold text-gray-800">Internet portátil al instante</h2>
-            </div>
-
-            <p className="text-xl text-red-600 font-bold mb-6">
-              Llévate PocketNet Pro con servicio incluido por meses. ¡Paga una vez y úsalo sin complicaciones!
-            </p>
-
-            {/* Características */}
-            <div className="grid md:grid-cols-2 gap-4 mb-8">
-
-              <div className="flex items-start gap-3">
-                <Check className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="font-bold text-lg">Funciona donde lo necesites</h3>
-                  <p className="text-gray-600">Ideal para hogar, trabajo, viajes o emergencias.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <Zap className="w-6 h-6 text-yellow-600 mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="font-bold text-lg">Hasta 150 Mbps</h3>
-                  <p className="text-gray-600">Velocidad más que suficiente para streaming, trabajo y juegos.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <Shield className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="font-bold text-lg">Conexión segura</h3>
-                  <p className="text-gray-600">Privado, protegido y libre de riesgos.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <Users className="w-6 h-6 text-purple-600 mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="font-bold text-lg">Conecta hasta 10 dispositivos</h3>
-                  <p className="text-gray-600">Toda la familia conectada sin bajar rendimiento.</p>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Info */}
-            <div className="bg-red-50 rounded-2xl p-6 mb-8">
-              <h3 className="text-2xl font-bold text-red-700 mb-4">
-                Sin contratos. Sin SIM. Sin mensualidades inesperadas.
-              </h3>
-              <p className="text-gray-700">
-                Olvídate de papeleos: solo enciende y úsalo.
-              </p>
-            </div>
-
-            {/* Oferta */}
-            <div className="bg-gradient-to-r from-pink-100 to-red-100 rounded-2xl p-6 mb-8">
-              <h3 className="text-2xl font-bold text-red-700 mb-4">
-                Solo hoy — Llévatelo por $399 MXN
-              </h3>
-              <p className="text-lg text-gray-700 mb-4">
-                Envío gratis + soporte 24/7 + garantía extendida
-              </p>
-              <div className="flex items-center gap-4 text-sm text-gray-600">
-                <span>⭐ Más de 1,000 unidades vendidas</span>
-                <span>❤️ 900+ clientes felices</span>
-              </div>
-            </div>
-
-            {/* Botón */}
-            <button
-              onClick={() => setShowModal(true)}
-              className="w-full bg-gradient-to-r from-pink-600 to-red-600 text-white text-2xl font-bold py-6 rounded-full hover:from-pink-700 hover:to-red-700 transition transform hover:scale-105 shadow-lg"
-            >
-              🛒 Comprar ahora
-            </button>
-
-            <p className="text-center text-sm text-gray-500 mt-4">
-              🔒 Pago seguro con Stripe | 🚚 Envío gratis a todo México
-            </p>
-
+        <div style={styles.section}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+            <span style={{ fontSize: '1.5rem' }}>🌎</span>
+            <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937' }}>
+              Internet portátil al instante
+            </h2>
           </div>
+
+          <p style={{ fontSize: '1.25rem', color: '#dc2626', fontWeight: 'bold', marginBottom: '1.5rem' }}>
+            Llévate PocketNet Pro con servicio incluido por meses. ¡Paga una vez y úsalo sin complicaciones!
+          </p>
+
+          {/* Características */}
+          <div style={styles.featureGrid}>
+            {[
+              { icon: '✅', title: 'Funciona donde lo necesites', desc: 'Ideal para hogar, trabajo, viajes o emergencias.' },
+              { icon: '⚡', title: 'Hasta 150 Mbps', desc: 'Velocidad más que suficiente para streaming, trabajo y juegos.' },
+              { icon: '🛡️', title: 'Conexión segura', desc: 'Privado, protegido y libre de riesgos.' },
+              { icon: '👨‍👩‍👧‍👦', title: 'Conecta hasta 10 dispositivos', desc: 'Toda la familia conectada sin bajar rendimiento.' }
+            ].map((feature, index) => (
+              <div key={index} style={styles.featureItem}>
+                <span style={{ fontSize: '1.5rem', marginTop: '0.25rem' }}>{feature.icon}</span>
+                <div>
+                  <h3 style={{ fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '0.25rem' }}>
+                    {feature.title}
+                  </h3>
+                  <p style={{ color: '#6b7280' }}>{feature.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Info Box */}
+          <div style={{ backgroundColor: '#fef2f2', borderRadius: '1rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#dc2626', marginBottom: '1rem' }}>
+              Sin contratos. Sin SIM. Sin mensualidades inesperadas.
+            </h3>
+            <p style={{ color: '#6b7280' }}>
+              Olvídate de papeleos: solo enciende y úsalo.
+            </p>
+          </div>
+
+          {/* Oferta Box */}
+          <div style={{ 
+            background: 'linear-gradient(to right, #fdf2f8, #fef2f2)', 
+            borderRadius: '1rem', 
+            padding: '1.5rem', 
+            marginBottom: '1.5rem' 
+          }}>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#dc2626', marginBottom: '1rem' }}>
+              Solo hoy — Llévatelo por ${precio} MXN
+            </h3>
+            <p style={{ fontSize: '1.125rem', color: '#6b7280', marginBottom: '1rem' }}>
+              Envío gratis + soporte 24/7 + garantía extendida
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', fontSize: '0.875rem', color: '#6b7280' }}>
+              <span>⭐ Más de 1,000 unidades vendidas</span>
+              <span>❤️ 900+ clientes felices</span>
+            </div>
+          </div>
+
+          {/* Botón Principal */}
+          <button
+            onClick={() => setShowModal(true)}
+            style={styles.ctaButton}
+          >
+            🛒 Comprar ahora
+          </button>
+
+          <p style={{ textAlign: 'center', fontSize: '0.875rem', color: '#6b7280', marginTop: '1rem' }}>
+            🔒 Pago seguro con Stripe | 🚚 Envío gratis a todo México
+          </p>
         </div>
 
         {/* Bonos */}
-        <div className="bg-white rounded-3xl shadow-xl p-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">🎁 Bonos especiales</h2>
+        <div style={styles.section}>
+          <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937', marginBottom: '1.5rem' }}>
+            🎁 Bonos especiales
+          </h2>
 
-          <div className="grid md:grid-cols-2 gap-4">
-
-            <div className="flex items-center gap-3 p-4 bg-pink-50 rounded-xl">
-              <span className="text-3xl">🔥</span>
-              <span className="text-lg">50% de descuento hoy</span>
-            </div>
-
-            <div className="flex items-center gap-3 p-4 bg-pink-50 rounded-xl">
-              <span className="text-3xl">🔥</span>
-              <span className="text-lg">Primeros meses incluidos</span>
-            </div>
-
-            <div className="flex items-center gap-3 p-4 bg-pink-50 rounded-xl">
-              <span className="text-3xl">🔥</span>
-              <span className="text-lg">Garantía de 6 meses</span>
-            </div>
-
-            <div className="flex items-center gap-3 p-4 bg-pink-50 rounded-xl">
-              <span className="text-3xl">🔥</span>
-              <span className="text-lg">Soporte técnico 24/7</span>
-            </div>
-
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+            {[
+              '50% de descuento hoy',
+              'Primeros meses incluidos', 
+              'Garantía de 6 meses',
+              'Soporte técnico 24/7'
+            ].map((bono, index) => (
+              <div key={index} style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.75rem', 
+                padding: '1rem', 
+                backgroundColor: '#fdf2f8',
+                borderRadius: '0.75rem'
+              }}>
+                <span style={{ fontSize: '1.5rem' }}>🔥</span>
+                <span style={{ fontSize: '1rem' }}>{bono}</span>
+              </div>
+            ))}
           </div>
         </div>
-
       </main>
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-
-            <div className="p-6">
-
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">Finalizar compra</h2>
+        <div style={styles.modalOverlay}>
+          <div style={styles.modalContent}>
+            <div style={{ padding: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1f2937' }}>Finalizar compra</h2>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full"
+                  style={{ padding: '0.5rem', borderRadius: '9999px', border: 'none', background: 'none', cursor: 'pointer', fontSize: '1.5rem' }}
                 >
-                  <X className="w-6 h-6" />
+                  ✕
                 </button>
               </div>
 
-              {/* ⚠️ ELIMINÉ LA SECCIÓN CONDICIONAL QUE USABA "success" */}
-              <div className="space-y-4">
-
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nombre completo *
-                  </label>
+                  <label style={styles.label}>Nombre completo *</label>
                   <input
                     type="text"
                     name="nombre"
                     value={formData.nombre}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                    style={styles.input}
                     placeholder="Juan Pérez"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Teléfono *
-                  </label>
+                  <label style={styles.label}>Teléfono *</label>
                   <input
                     type="tel"
                     name="telefono"
                     value={formData.telefono}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                    style={styles.input}
                     placeholder="55 1234 5678"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Correo electrónico *
-                  </label>
+                  <label style={styles.label}>Correo electrónico *</label>
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                    style={styles.input}
                     placeholder="correo@ejemplo.com"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Dirección completa *
-                  </label>
+                  <label style={styles.label}>Dirección completa *</label>
                   <input
                     type="text"
                     name="direccion"
                     value={formData.direccion}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                    style={styles.input}
                     placeholder="Calle, número, colonia"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Ciudad *
-                    </label>
+                    <label style={styles.label}>Ciudad *</label>
                     <input
                       type="text"
                       name="ciudad"
                       value={formData.ciudad}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                      style={styles.input}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Código Postal *
-                    </label>
+                    <label style={styles.label}>Código Postal *</label>
                     <input
                       type="text"
                       name="codigoPostal"
                       value={formData.codigoPostal}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                      style={styles.input}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Cantidad
-                  </label>
+                  <label style={styles.label}>Cantidad</label>
                   <select
                     name="cantidad"
                     value={formData.cantidad}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-600 focus:border-transparent"
+                    style={styles.input}
                   >
-                    <option value="1">1 pieza - $399 MXN</option>
-                    <option value="2">2 piezas - $798 MXN</option>
-                    <option value="3">3 piezas - $1,197 MXN</option>
+                    <option value="1">1 pieza - ${precio} MXN</option>
+                    <option value="2">2 piezas - ${precio * 2} MXN</option>
+                    <option value="3">3 piezas - ${precio * 3} MXN</option>
                   </select>
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-                  <div className="flex justify-between">
+                <div style={{ backgroundColor: '#f9fafb', borderRadius: '0.75rem', padding: '1rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                     <span>Subtotal:</span>
-                    <span className="font-bold">${precio * formData.cantidad} MXN</span>
+                    <span style={{ fontWeight: 'bold' }}>${precio * formData.cantidad} MXN</span>
                   </div>
-
-                  <div className="flex justify-between">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                     <span>Envío:</span>
-                    <span className="font-bold text-green-600">GRATIS</span>
+                    <span style={{ fontWeight: 'bold', color: '#10b981' }}>GRATIS</span>
                   </div>
-
-                  <div className="border-t pt-2 flex justify-between text-lg">
-                    <span className="font-bold">Total:</span>
-                    <span className="font-bold text-pink-600">${precio * formData.cantidad} MXN</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
+                    <span style={{ fontWeight: 'bold', fontSize: '1.125rem' }}>Total:</span>
+                    <span style={{ fontWeight: 'bold', fontSize: '1.125rem', color: '#db2777' }}>
+                      ${precio * formData.cantidad} MXN
+                    </span>
                   </div>
                 </div>
 
                 <button
                   onClick={handleSubmit}
                   disabled={paymentProcessing}
-                  className="w-full bg-gradient-to-r from-pink-600 to-red-600 text-white text-lg font-bold py-4 rounded-xl hover:from-pink-700 hover:to-red-700 transition disabled:opacity-50"
+                  style={{
+                    width: '100%',
+                    background: 'linear-gradient(to right, #db2777, #dc2626)',
+                    color: 'white',
+                    fontSize: '1.125rem',
+                    fontWeight: 'bold',
+                    padding: '1rem',
+                    borderRadius: '0.75rem',
+                    border: 'none',
+                    cursor: paymentProcessing ? 'not-allowed' : 'pointer',
+                    opacity: paymentProcessing ? 0.5 : 1
+                  }}
                 >
                   {paymentProcessing ? 'Redirigiendo a Stripe...' : '💳 Pagar con Stripe'}
                 </button>
 
-                <p className="text-xs text-gray-500 text-center">
+                <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#6b7280' }}>
                   🔒 Pago protegido con encriptación avanzada.
                 </p>
-
               </div>
-
             </div>
-
           </div>
         </div>
       )}
-
     </div>
   );
 }
